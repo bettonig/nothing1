@@ -26,7 +26,7 @@ class Neuron {
 		
 		//Constructor & Destructor
 		Neuron ();
-		Neuron (double membrane_potential, unsigned int nb_spks, time_vector time_spks);
+		Neuron (double membrane_potential, unsigned int nb_spks);
 		/*Neuron (const Neuron& another);*/
 		~Neuron ();
 		
@@ -42,7 +42,8 @@ class Neuron {
 		
 		//Methods
 		bool Is_refractory (double time1);
-		void Update_state (double time1, double dT, double Iex);								// dT = n * h
+		bool Has_now_spiked (double time1);
+		void Update_state (double time1, double dT, double Iext2, int spiked_received);								// dT = n * h
 		
 };
 

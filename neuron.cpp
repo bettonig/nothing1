@@ -8,9 +8,9 @@ Neuron::Neuron ()
 :membrane_potential_(0.0), nb_spks_(0), time_spks_()
 {time_spks_.push_back(0);}
 
-Neuron::Neuron (double membrane_potential, unsigned int nb_spks, time_vector time_spks)
-:membrane_potential_(membrane_potential), nb_spks_(nb_spks), time_spks_(time_spks)
-{}
+Neuron::Neuron (double membrane_potential, unsigned int nb_spks)
+:membrane_potential_(membrane_potential), nb_spks_(nb_spks), time_spks_()
+{time_spks_.push_back(0);}
 
 /*Neuron::Neuron (const Neuron& another)
 :
@@ -48,21 +48,37 @@ void Neuron::Set_time_spks (time_vector time_spks)
 //Methods::
 bool Neuron::Is_refractory(double time1)
 {
-	if(time1 - time_spks_.back() < refractory_time_)
+	if(Has_now_spiked(time1) and time1 - time_spks_.back() < refractory_time_)
 	{
 		return true;
 	}
 	return false;
 }
 
-void Neuron::Update_state(double time1, double dT, double Iex)
+bool Neuron::Has_now_spiked (double time1)
+{
+	if (time_spks_.size() < 2)
+	{
+		return false;
+	} 
+	else 
+	{
+		if (std::abs(time1 - time_spks_.back()) <= 1/100)
+		{
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+void Neuron::Update_state(double time1, double dT, double Iext2, int spiked_received)
 {
 	if (Is_refractory(time1))
 	{
 		membrane_potential_ = 0.0;
-	} else 
-	{
-		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iex * (tau_ / c_) * (1 - exp(-(dT/tau_)));
+	} else {
+		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iext2 * (tau_ / c_) * (1 - exp(-(dT/tau_))) + (spiked_received * 4/* normally threshold */) ;
 		if (membrane_potential_ >= threshold_)
 		{
 			//std::cout << nb_spks_ << std::endl;
