@@ -1,4 +1,4 @@
-#include "neuron.cpp"
+#include "neuron.h"
 #include <iostream>
 #include <climits>
 #include <fstream>
