@@ -3,59 +3,84 @@
 #include <vector>
 //using namespace std;
 
+
+
+
 //Constructor & Destructor::
+
 Neuron::Neuron ()
 :membrane_potential_(0.0), nb_spks_(0), time_spks_()
-{time_spks_.push_back(0);}
+{
+	time_spks_.push_back(0);
+	for (size_t i(0); i <= delay + 1; ++i) 
+	{
+		delay_buffer.push_back(0);
+	}
+}
 
 Neuron::Neuron (double membrane_potential, unsigned int nb_spks)
 :membrane_potential_(membrane_potential), nb_spks_(nb_spks), time_spks_()
-{time_spks_.push_back(0);}
+{
+	time_spks_.push_back(0);
+	for (size_t i(0); i <= delay + 1; ++i)
+	{
+		delay_buffer.push_back(0);
+	}
+}
 
 /*Neuron::Neuron (const Neuron& another)
 :
 {}*/
 
 Neuron::~Neuron ()
-{}
+{std::cout << "NEURON TERMINATED" << std::endl;}
+
+//----------------------------------------------------------------------
 
 
 
 // Getters::
+
 double Neuron::Get_membrane_potential () const
 {return membrane_potential_;}
 
 unsigned int Neuron::Get_nb_spks () const
 {return nb_spks_;}
 
-time_vector Neuron::Get_time_spks () const
+int_vector Neuron::Get_time_spks () const
 {return time_spks_;}
+
+//----------------------------------------------------------------------
 
 
 
 //Setters::
+
 void Neuron::Set_membrane_potential (double membrane_potential)
 {membrane_potential_ = membrane_potential;}
 
 void Neuron::Set_nb_spks (unsigned int nb_spks)
 {nb_spks_ = nb_spks;}
 
-void Neuron::Set_time_spks (time_vector time_spks)
+void Neuron::Set_time_spks (int_vector time_spks)
 {time_spks_ = time_spks;}
+
+//----------------------------------------------------------------------
 
 
 
 //Methods::
-bool Neuron::Is_refractory(double time1)
+
+bool Neuron::Is_refractory(double dT)
 {
-	if(Has_now_spiked(time1) and time1 - time_spks_.back() < refractory_time_)
+	if (steps_intern_ > 20 and steps_intern_ - time_spks_.back() < refractory_time_)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool Neuron::Has_now_spiked (double time1)
+bool Neuron::Has_now_spiked (double dT)
 {
 	if (time_spks_.size() < 2)
 	{
@@ -63,8 +88,9 @@ bool Neuron::Has_now_spiked (double time1)
 	} 
 	else 
 	{
-		if (std::abs(time1 - time_spks_.back()) <= 1/100)
+		if (steps_intern_ == time_spks_.back())
 		{
+			std::cout << "WOLOLO" << std::endl;
 			return true;
 		} else {
 			return false;
@@ -72,22 +98,38 @@ bool Neuron::Has_now_spiked (double time1)
 	}
 }
 
-void Neuron::Update_state(double time1, double dT, double Iext2, int spiked_received)
+void Neuron::Update_state(double dT, double Iext2)
 {
-	if (Is_refractory(time1))
+	if (Is_refractory(dT))
 	{
 		membrane_potential_ = 0.0;
 	} else {
-		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iext2 * (tau_ / c_) * (1 - exp(-(dT/tau_))) + (spiked_received * 4/* normally threshold */) ;
+		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iext2 * (tau_ / c_) * (1 - exp(-(dT/tau_))) + (delay_buffer[(steps_intern_ + delay) % (delay + 1)] * 4/* normally threshold */) ;
+		delay_buffer[(steps_intern_ + delay) % (delay + 1)] = 0;
 		if (membrane_potential_ >= threshold_)
 		{
 			//std::cout << nb_spks_ << std::endl;
-			time_spks_.push_back(time1 + dT);
+			time_spks_.push_back(steps_intern_ + 1);
 			nb_spks_ = nb_spks_ + 1;					
 			//std::cout << "WOLOLO" << std::endl;
 			
 		};
 	};
+	steps_intern_ += 1;
 	//std::cout << nb_spks_ << std::endl;
 }
+
+
+void Neuron::Send_spike(Neuron& neuron, int step)
+{
+	neuron.Store_spike(step);
+}
+
+
+void Neuron::Store_spike(int step)
+{
+	int modulo = (step + delay) % (delay + 1);
+	delay_buffer[modulo] += 1;
+}
+
 
