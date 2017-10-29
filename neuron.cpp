@@ -71,7 +71,7 @@ void Neuron::Set_time_spks (int_vector time_spks)
 
 //Methods::
 
-bool Neuron::Is_refractory(double dT)
+bool Neuron::Is_refractory(/*double dT*/)
 {
 	if (steps_intern_ > 20 and steps_intern_ - time_spks_.back() < refractory_time_)
 	{
@@ -80,7 +80,7 @@ bool Neuron::Is_refractory(double dT)
 	return false;
 }
 
-bool Neuron::Has_now_spiked (double dT)
+bool Neuron::Has_now_spiked (/*double dT*/)
 {
 	if (time_spks_.size() < 2)
 	{
@@ -90,7 +90,7 @@ bool Neuron::Has_now_spiked (double dT)
 	{
 		if (steps_intern_ == time_spks_.back())
 		{
-			std::cout << "WOLOLO" << std::endl;
+			//std::cout << "WOLOLO" << std::endl;
 			return true;
 		} else {
 			return false;
@@ -100,11 +100,11 @@ bool Neuron::Has_now_spiked (double dT)
 
 void Neuron::Update_state(double dT, double Iext2)
 {
-	if (Is_refractory(dT))
+	if (Is_refractory(/*dT*/))
 	{
 		membrane_potential_ = 0.0;
 	} else {
-		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iext2 * (tau_ / c_) * (1 - exp(-(dT/tau_))) + (delay_buffer[(steps_intern_ + delay) % (delay + 1)] * 4/* normally threshold */) ;
+		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iext2 * (tau_ / c_) * (1 - exp(-(dT/tau_))) + (delay_buffer[(steps_intern_ + delay) % (delay + 1)] * J_/* normally threshold */) ;
 		delay_buffer[(steps_intern_ + delay) % (delay + 1)] = 0;
 		if (membrane_potential_ >= threshold_)
 		{
@@ -120,16 +120,22 @@ void Neuron::Update_state(double dT, double Iext2)
 }
 
 
-void Neuron::Send_spike(Neuron& neuron, int step)
+void Neuron::Send_spike(Neuron& neuron, int step, bool is_Inhib)
 {
-	neuron.Store_spike(step);
+	neuron.Store_spike(step, is_Inhib);
+	std::cout<<"spike send"<<std::endl;
 }
 
 
-void Neuron::Store_spike(int step)
+void Neuron::Store_spike(int step, bool is_Inhib)
 {
 	int modulo = (step + delay) % (delay + 1);
-	delay_buffer[modulo] += 1;
+	if (is_Inhib) {
+		delay_buffer[modulo] -= 5;
+	} else {
+		delay_buffer[modulo] += 1;
+
+	}
 }
 
 
