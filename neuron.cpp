@@ -33,7 +33,7 @@ Neuron::Neuron (double membrane_potential, unsigned int nb_spks)
 {}*/
 
 Neuron::~Neuron ()
-{std::cout << "NEURON TERMINATED" << std::endl;}
+{/*std::cout << "NEURON TERMINATED" << std::endl;*/}
 
 //----------------------------------------------------------------------
 
@@ -132,9 +132,10 @@ void Neuron::Store_spike(int step, bool is_Inhib)
 	int modulo = (step + delay) % (delay + 1);
 	if (is_Inhib) {
 		delay_buffer[modulo] -= 5;
+		//std::cout<<"  inhib"<<std::endl;
 	} else {
 		delay_buffer[modulo] += 1;
-
+		//std::cout<<"excit"<<std::endl;
 	}
 }
 

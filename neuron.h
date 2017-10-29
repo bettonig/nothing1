@@ -26,7 +26,7 @@ class Neuron {
 		static constexpr double tau_ = 20;
 		static constexpr double threshold_ = 20;
 		static constexpr double c_ = 1.0;
-		static constexpr double J_ = 1.0; //0.1
+		static constexpr double J_ = 0.1; //0.1
 		const int refractory_time_ = 20;
 		
 		

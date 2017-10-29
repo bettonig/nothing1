@@ -14,7 +14,7 @@
 int main()
 {
 
-	/*const*/int stop_time(2000);
+	/*const*/int stop_time(800);
 	int start_step(0);
 	int stop_step(0);
 	int nb_step(0);
@@ -37,13 +37,13 @@ int main()
 		};
 	}
 	*/
-	constexpr int nb_neurons(10); //12500
+	constexpr int nb_neurons(4000); //12500
 	
 	constexpr int nb_exhit(4*nb_neurons/5); //10000							nb of exitatory Neurons
 	constexpr int nb_inhib(1*nb_neurons/5); //2500							nb of inhibitory Neurons
 	
-	constexpr int exhit_conn(nb_exhit/2); //1000							nb 
-	constexpr int inhib_conn(nb_inhib/2); //250
+	constexpr int exhit_conn(nb_exhit/10); //1000							nb 
+	constexpr int inhib_conn(nb_inhib/10); //250
 	constexpr int conn_tot(exhit_conn + inhib_conn); //1250					each neurons is connected to 1 every 10 neurons
 		
 		
@@ -53,7 +53,7 @@ int main()
 
 	
 	while (start_step <= 0 or start_step >= stop_time) {											// This loop is to make sure the person using this program
-		std::cout << "Please inserteth the beginnig step (>0 & <2000) :" << std::endl;				// enters a number above 0.
+		std::cout << "Please inserteth the beginnig step (>0 & <800) :" << std::endl;				// enters a number above 0.
 		std::cin >> start_step;
 		if (std::cin.fail() or start_step >= stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -64,7 +64,7 @@ int main()
 	
 	
 	while (stop_step <= 0 or stop_step < start_step or stop_step > stop_time) {											// This loop is to make sure the person using this program
-		std::cout << "Please inserteth the stopping step (>beginning step & <=200) :" << std::endl;				// enters a number above 0.
+		std::cout << "Please inserteth the stopping step (>beginning step & <=800) :" << std::endl;				// enters a number above 0.
 		std::cin >> stop_step;
 		if (std::cin.fail() or stop_step < start_step or stop_step > stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -117,6 +117,8 @@ int main()
 	std::ofstream Neurons_mem_pot;
 	Neurons_mem_pot.open("potentials.txt");
 	
+	bool is_Inhib(false);
+	
 	while (nb_step < stop_time) 
 	{
 		if (nb_step < start_step or nb_step > stop_step) 
@@ -134,7 +136,7 @@ int main()
 			{
 				for (size_t j(0); j < conn_tot; ++j) {
 					
-					bool is_Inhib(false);
+					//bool is_Inhib(false);
 					
 					if (i < nb_exhit) {
 						is_Inhib = false;
