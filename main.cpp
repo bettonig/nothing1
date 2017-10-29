@@ -143,17 +143,15 @@ int main()
 					}
 					
 					neurons_[i].Send_spike(neurons_[neurons_targets[i][j]], nb_step, is_Inhib);
-					//spiked_conn = 1;
 				}
 			}
 			neurons_[i].Update_state(h, Iext2);
 			Neurons_mem_pot << neurons_[i].Get_membrane_potential() << '\t';
-			std::cout << "at step " << nb_step << " : " << neurons_[i].Get_membrane_potential() << " mV" << '\t';
+			//std::cout << "at step " << nb_step << " : " << neurons_[i].Get_membrane_potential() << " mV" << '\t';
 			};
-		std::cout << std::endl;
-		//spiked_conn = 0;
+		//std::cout << std::endl;
 		Neurons_mem_pot << std::endl;
-		std::cout << std::endl;
+		//std::cout << std::endl;
 		++nb_step;
 	};
 

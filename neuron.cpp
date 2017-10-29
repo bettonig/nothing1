@@ -123,7 +123,7 @@ void Neuron::Update_state(double dT, double Iext2)
 void Neuron::Send_spike(Neuron& neuron, int step, bool is_Inhib)
 {
 	neuron.Store_spike(step, is_Inhib);
-	std::cout<<"spike send"<<std::endl;
+	//std::cout<<"spike send"<<std::endl;
 }
 
 
