@@ -1,8 +1,7 @@
 #include "neuron.h"
-#include <cmath>
 #include <vector>
+//#include <cmath>
 //using namespace std;
-
 
 
 
@@ -35,6 +34,8 @@ Neuron::Neuron (double membrane_potential, unsigned int nb_spks)
 Neuron::~Neuron ()
 {/*std::cout << "NEURON TERMINATED" << std::endl;*/}
 
+
+
 //----------------------------------------------------------------------
 
 
@@ -49,6 +50,8 @@ unsigned int Neuron::Get_nb_spks () const
 
 int_vector Neuron::Get_time_spks () const
 {return time_spks_;}
+
+
 
 //----------------------------------------------------------------------
 
@@ -65,6 +68,8 @@ void Neuron::Set_nb_spks (unsigned int nb_spks)
 void Neuron::Set_time_spks (int_vector time_spks)
 {time_spks_ = time_spks;}
 
+
+
 //----------------------------------------------------------------------
 
 
@@ -73,12 +78,13 @@ void Neuron::Set_time_spks (int_vector time_spks)
 
 bool Neuron::Is_refractory(/*double dT*/)
 {
-	if (steps_intern_ > 20 and steps_intern_ - time_spks_.back() < refractory_time_)
+	if (steps_intern_ >= 20 and steps_intern_ - time_spks_.back() < refractory_time_)
 	{
 		return true;
 	}
 	return false;
 }
+
 
 bool Neuron::Has_now_spiked (/*double dT*/)
 {
@@ -94,25 +100,24 @@ bool Neuron::Has_now_spiked (/*double dT*/)
 			return true;
 		} else {
 			return false;
-		}
-	}
+		};
+	};
 }
 
-void Neuron::Update_state(double dT, double Iext2)
+
+void Neuron::Update_state(double Iext2, int poisson)
 {
 	if (Is_refractory(/*dT*/))
 	{
 		membrane_potential_ = 0.0;
 	} else {
-		membrane_potential_ = exp(-(dT/tau_)) * membrane_potential_ + Iext2 * (tau_ / c_) * (1 - exp(-(dT/tau_))) + (delay_buffer[(steps_intern_ + delay) % (delay + 1)] * J_/* normally threshold */) ;
+		membrane_potential_ = Exp_ * membrane_potential_ + Iext2 * c2 * (1 - Exp_) + ((delay_buffer[(steps_intern_ + delay) % (delay + 1)] + poisson) * J_) ;
 		delay_buffer[(steps_intern_ + delay) % (delay + 1)] = 0;
 		if (membrane_potential_ >= threshold_)
 		{
 			//std::cout << nb_spks_ << std::endl;
 			time_spks_.push_back(steps_intern_ + 1);
-			nb_spks_ = nb_spks_ + 1;					
-			//std::cout << "WOLOLO" << std::endl;
-			
+			nb_spks_ = nb_spks_ + 1;								
 		};
 	};
 	steps_intern_ += 1;
@@ -136,7 +141,7 @@ void Neuron::Store_spike(int step, bool is_Inhib)
 	} else {
 		delay_buffer[modulo] += 1;
 		//std::cout<<"excit"<<std::endl;
-	}
+	};
 }
 
 
