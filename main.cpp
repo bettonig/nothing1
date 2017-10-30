@@ -14,7 +14,7 @@
 int main()
 {
 
-	/*const*/int stop_time(1500);
+	/*const*/int stop_time(2000);
 	int start_step(0);
 	int stop_step(0);
 	int nb_step(0);
@@ -24,7 +24,7 @@ int main()
 	double Iext2(0.0);		//pA										// Current 
 	
 
-	constexpr int nb_neurons(3000); //12500
+	constexpr int nb_neurons(12500); //12500
 	constexpr int nb_exhit(4*nb_neurons/5); //10000						nb of excitatory Neurons
 	constexpr int nb_inhib(1*nb_neurons/5); //2500						nb of inhibitory Neurons
 	
@@ -33,16 +33,16 @@ int main()
 	constexpr int conn_tot(exhit_conn + inhib_conn); //1250				each neurons is connected to 1 every 10 neurons
 		
 		
-	std::array<std::array<int, conn_tot>, nb_neurons> neurons_targets;	// neurons_targets : for each i neurons there is j columns of connections,
-	std::array<Neuron, nb_neurons> neurons_;							// containing each the place (int) of a random neuron it is connected to
-																		// neurons_ : This vector contains the complete list of Neurons
+	std::vector<std::vector<int>> neurons_targets(nb_neurons, std::vector<int>(conn_tot));	// neurons_targets : for each i neurons there is j columns of connections,
+	std::vector<Neuron> neurons_(nb_neurons);												// containing each the place (int) of a random neuron it is connected to
+																							// neurons_ : This vector contains the complete list of Neurons
 
 
 
 //----------------------------------------------------------------------
 
 	while (start_step <= 0 or start_step >= stop_time) {											
-		std::cout << "Please inserteth the beginnig step (>0 & <1500) :" << std::endl;			
+		std::cout << "Please inserteth the beginnig step (>0 & <2000) :" << std::endl;			
 		std::cin >> start_step;
 		if (std::cin.fail() or start_step >= stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -53,7 +53,7 @@ int main()
 	
 	
 	while (stop_step <= 0 or stop_step < start_step or stop_step > stop_time) {						
-		std::cout << "Please inserteth the stopping step (>beginning step & <=1500) :" << std::endl;	
+		std::cout << "Please inserteth the stopping step (>beginning step & <=2000) :" << std::endl;	
 		std::cin >> stop_step;
 		if (std::cin.fail() or stop_step < start_step or stop_step > stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
