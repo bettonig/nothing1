@@ -46,6 +46,7 @@ class Neuron {
 		double Get_membrane_potential () const;
 		unsigned int Get_nb_spks () const;
 		int_vector Get_time_spks () const;
+		int Get_buffer(size_t place) const;
 		
 //----------------------------------------------------------------------		
 		

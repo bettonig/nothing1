@@ -51,6 +51,9 @@ unsigned int Neuron::Get_nb_spks () const
 int_vector Neuron::Get_time_spks () const
 {return time_spks_;}
 
+int Neuron::Get_buffer(size_t place) const
+{return delay_buffer[place];}
+
 
 
 //----------------------------------------------------------------------
@@ -78,7 +81,7 @@ void Neuron::Set_time_spks (int_vector time_spks)
 
 bool Neuron::Is_refractory(/*double dT*/)
 {
-	if (steps_intern_ >= 20 and steps_intern_ - time_spks_.back() < refractory_time_)
+	if (steps_intern_ >= refractory_time_ and steps_intern_ - time_spks_.back() < refractory_time_)
 	{
 		return true;
 	}
