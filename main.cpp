@@ -14,7 +14,7 @@
 int main()
 {
 
-	/*const*/int stop_time(2000);
+	/*const*/int stop_time(5000);
 	int start_step(0);
 	int stop_step(0);
 	int nb_step(0);
@@ -38,11 +38,10 @@ int main()
 																							// neurons_ : This vector contains the complete list of Neurons
 
 
-
 //----------------------------------------------------------------------
 
 	while (start_step <= 0 or start_step >= stop_time) {											
-		std::cout << "Please inserteth the beginnig step (>0 & <2000) :" << std::endl;			
+		std::cout << "Please inserteth the beginnig step (>0 & <5000) :" << std::endl;			
 		std::cin >> start_step;
 		if (std::cin.fail() or start_step >= stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -53,7 +52,7 @@ int main()
 	
 	
 	while (stop_step <= 0 or stop_step < start_step or stop_step > stop_time) {						
-		std::cout << "Please inserteth the stopping step (>beginning step & <=2000) :" << std::endl;	
+		std::cout << "Please inserteth the stopping step (>beginning step & <=5000) :" << std::endl;	
 		std::cin >> stop_step;
 		if (std::cin.fail() or stop_step < start_step or stop_step > stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -79,7 +78,7 @@ int main()
  * */
 
 //----------------------------------------------------------------------	
-	
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> random_targets(0, nb_neurons-1);
@@ -93,7 +92,7 @@ int main()
 	
 /* This code enables us to iniate the matrix with a random number in each 
  * cases, so each neurons i will be connected to randomly chosen neurons
- * */
+ */
  
 	int lambda(2);
 	std::random_device rd_;
@@ -103,8 +102,11 @@ int main()
 //----------------------------------------------------------------------
 
 	
-	std::ofstream Neurons_mem_pot;
-	Neurons_mem_pot.open("potentials.txt");
+	//std::ofstream Neurons_mem_pot;
+	//Neurons_mem_pot.open("potentials.txt");
+	
+	std::ofstream Spikes;
+	Spikes.open("Spikes_plot.txt");
 	
 	bool is_Inhib(false);
 	Iext2 = Iext;
@@ -134,22 +136,23 @@ int main()
 					
 					neurons_[i].Send_spike(neurons_[neurons_targets[i][j]], nb_step, is_Inhib);
 				}
+					Spikes << nb_step << '\t' << i << std::endl;
 			}
 			if (nb_step < start_step or nb_step > stop_step) {
 				neurons_[i].Update_state(Iext2, 0);
 			} else {
 				neurons_[i].Update_state(Iext2, poisson_distribution(generate));
 			}
-			Neurons_mem_pot << neurons_[i].Get_membrane_potential() << '\t';
+			//Neurons_mem_pot << neurons_[i].Get_membrane_potential() << '\t';
 			//std::cout << "at step " << nb_step << " : " << neurons_[i].Get_membrane_potential() << " mV" << '\t';
 			};
-		//std::cout << std::endl;
-		Neurons_mem_pot << std::endl;
-		//std::cout << std::endl;
+		//Neurons_mem_pot << std::endl;
 		++nb_step;
 	};
 
-	Neurons_mem_pot.close();
+	//Neurons_mem_pot.close();
+	
+	Spikes.close();
 	
 /* 1st step : the current input is only active inside the chosen interval of time.
  * 				outside, the current input is 0.

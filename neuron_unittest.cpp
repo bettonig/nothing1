@@ -24,13 +24,73 @@ TEST (NeuronTest, MembranePotential) {
 }
 
 
-TEST (NeuronTest, ) {
+TEST (NeuronTest, StoreSpikeExcit) {
 	Neuron neuron1;
+	
+	neuron1.Store_spike(20 , false);
+	EXPECT_EQ(neuron1.Get_buffer(3), 1);
+}
+
+
+TEST (NeuronTest, StoreSpikeInhib) {
 	Neuron neuron2;
 	
-	neuron1.Send_spike(neuron2, 10, false);
-	EXPECT_EQ(neuron2.Get_buffer(9), 1);
+	neuron2.Store_spike(20, true);
+	EXPECT_EQ(neuron2.Get_buffer(3), -5);
+}
+
+
+TEST (NeuronTest, SendSpikes) {
+	Neuron neuron3;
+	Neuron neuron4;
 	
+	neuron3.Send_spike(neuron4, 10, false);
+	EXPECT_EQ(neuron4.Get_buffer(9), 1);
+	
+}
+
+
+TEST (NeuronTest, UpdateState100) {
+	Neuron neuron5;
+	
+	for (size_t i(0); i < 2000; ++i) {
+		neuron5.Update_state(1.0, 0);
+	}
+	
+	EXPECT_EQ(neuron5.Has_now_spiked(), false);
+}
+
+
+TEST (NeuronTest, UpdateState101) {
+	Neuron neuron6;
+	
+	for (size_t i(0); i < 924; ++i) {
+		neuron6.Update_state(1.01, 0);
+	}
+	
+	EXPECT_EQ(neuron6.Has_now_spiked(), true);
+}
+
+
+
+TEST (NeuronTest, IsRefractory) {
+	Neuron neuron7;
+	
+	for (size_t i(0); i < 923; ++i) {
+		neuron7.Update_state(1.01, 0);
+	}
+	
+	EXPECT_EQ(neuron7.Is_refractory(), false);
+	
+	for (size_t i(0); i < 20; ++i) {
+		neuron7.Update_state(1.01, 0);
+	}
+	
+	EXPECT_EQ(neuron7.Is_refractory(), true);
+	
+		neuron7.Update_state(1.01, 0);
+		
+	EXPECT_EQ(neuron7.Is_refractory(), false);
 }
 
 
