@@ -77,7 +77,7 @@ void Neuron::Set_time_spks (int_vector time_spks)
 
 
 
-//Methods::
+///Methods::
 
 bool Neuron::Is_refractory(/*double dT*/)
 {
@@ -87,6 +87,7 @@ bool Neuron::Is_refractory(/*double dT*/)
 	}
 	return false;
 }
+///Is_Refractory : return true if the neuron has just spiked (steps < 20)
 
 
 bool Neuron::Has_now_spiked (/*double dT*/)
@@ -106,6 +107,7 @@ bool Neuron::Has_now_spiked (/*double dT*/)
 		};
 	};
 }
+///Has_now_Spiked : return true only if a spike just occured 
 
 
 void Neuron::Update_state(double Iext2, int poisson)
@@ -118,14 +120,15 @@ void Neuron::Update_state(double Iext2, int poisson)
 		delay_buffer[(steps_intern_ + delay) % (delay + 1)] = 0;
 		if (membrane_potential_ >= threshold_)
 		{
-			//std::cout << nb_spks_ << std::endl;
 			time_spks_.push_back(steps_intern_ + 1);
 			nb_spks_ = nb_spks_ + 1;								
 		};
 	};
 	steps_intern_ += 1;
-	//std::cout << nb_spks_ << std::endl;
 }
+/**Update_state : 	if the neuron is refractory, its membrane is zero.
+ * 					otherwise, its new membrane potential will be calculated & its buffer at delay + step is set to 0
+ * */
 
 
 void Neuron::Send_spike(Neuron& neuron, int step, bool is_Inhib)
@@ -133,6 +136,9 @@ void Neuron::Send_spike(Neuron& neuron, int step, bool is_Inhib)
 	neuron.Store_spike(step, is_Inhib);
 	//std::cout<<"spike send"<<std::endl;
 }
+/** n1.Send_spike(n2, step, T/F) : n1 will call Store_spike of n2 and give as 
+ *  arguments the time (step) n1 has spiked and wether it is excitatory or inhibitory
+ * */
 
 
 void Neuron::Store_spike(int step, bool is_Inhib)
@@ -146,5 +152,7 @@ void Neuron::Store_spike(int step, bool is_Inhib)
 		//std::cout<<"excit"<<std::endl;
 	};
 }
-
+/** n2.Store_spike(step, T/F) : n2 will insert in its buffer that 
+ *  delay-steps later, it will receive the information sent by n1
+ * */
 

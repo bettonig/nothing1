@@ -32,7 +32,7 @@ Network::Network ()
 void Network::ask_display() {
 
 	while (start_step <= 0 or start_step >= stop_time) {											
-		std::cout << "Please inserteth the beginnig step (>0 & <2000) :" << std::endl;			
+		std::cout << "Please inserteth the beginnig step (>0 & <10000) :" << std::endl;			
 		std::cin >> start_step;
 		if (std::cin.fail() or start_step >= stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -43,7 +43,7 @@ void Network::ask_display() {
 	
 	
 	while (stop_step <= 0 or stop_step < start_step or stop_step > stop_time) {						
-		std::cout << "Please inserteth the stopping step (>beginning step & <=5000) :" << std::endl;	
+		std::cout << "Please inserteth the stopping step (>beginning step & <=10000) :" << std::endl;	
 		std::cin >> stop_step;
 		if (std::cin.fail() or stop_step < start_step or stop_step > stop_time) {
 			std::cout << "I'm afraid i can't do that Dave!" << std::endl;
@@ -72,8 +72,8 @@ void Network::ask_display() {
 
 
 
-///----------------------------------------------------------------------
-///----------------------------------------------------------------------
+///---------------------------------------------------------------------
+///---------------------------------------------------------------------
 
 
 
@@ -140,7 +140,7 @@ void Network::rum_rum()
 	Spikes.close();
 	
 /** 1st step : the current input is only active inside the chosen interval of time.
- * 				outside, the current input is 0.
+ * 				Outside, the current input is 0.
  * 
  * 2nd step : we check if the neuron i has spiked, if yes : send spike to every 
  * 													neurons it is connected to.
@@ -148,4 +148,4 @@ void Network::rum_rum()
  * 3rd step : we update the neuron and write its potential in the .txt file
  * 
  * */
- }
+}
