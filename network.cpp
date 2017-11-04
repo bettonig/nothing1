@@ -118,9 +118,11 @@ void Network::rum_rum()
 					{
 						is_Inhib = true;
 					}
-					neurons_[i].Send_spike(neurons_[neurons_targets[i][j]], (nb_step-1), is_Inhib);
+					neurons_[i].Send_spike(neurons_[neurons_targets[i][j]], (nb_step), is_Inhib);
 				}
+				//if (nb_step > 5000 and nb_step < 7000) {
 					Spikes << nb_step << '\t' << i << std::endl;
+				//}
 			}
 			if (nb_step < start_step or nb_step > stop_step) 
 			{

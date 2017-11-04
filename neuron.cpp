@@ -77,7 +77,7 @@ void Neuron::Set_time_spks (int_vector time_spks)
 
 
 
-///Methods::
+//Methods::
 
 bool Neuron::Is_refractory(/*double dT*/)
 {
@@ -116,7 +116,7 @@ void Neuron::Update_state(double Iext2, int poisson)
 	{
 		membrane_potential_ = 0.0;
 	} else {
-		membrane_potential_ = Exp_ * membrane_potential_ + Iext2 * c2 * (1 - Exp_) + ((delay_buffer[(steps_intern_ + delay) % (delay + 1)] + poisson) * J_) ;
+		membrane_potential_ = Exp_ * membrane_potential_ + Iext2 * c2 * (1 - Exp_) + ((delay_buffer[((steps_intern_ + 1) + delay) % (delay + 1)] + poisson) * J_) ;
 		delay_buffer[(steps_intern_ + delay) % (delay + 1)] = 0;
 		if (membrane_potential_ >= threshold_)
 		{
