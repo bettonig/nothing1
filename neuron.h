@@ -1,12 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-//using namespace std;
 
 #ifndef NEURON_H
 #define NEURON_H
 
-//typedef std::vector<int> time_vector;
 typedef std::vector<int> int_vector;
 
 
@@ -34,7 +32,7 @@ class Neuron {
 		
 	public:
 		
-	//Constructor & Destructor :
+	///Constructor & Destructor :
 		Neuron ();
 		Neuron (double membrane_potential, unsigned int nb_spks);
 		/*Neuron (const Neuron& another);*/
@@ -42,7 +40,7 @@ class Neuron {
 
 //----------------------------------------------------------------------
 		
-	//Getters :
+	///Getters :
 		double Get_membrane_potential () const;
 		unsigned int Get_nb_spks () const;
 		int_vector Get_time_spks () const;
@@ -50,14 +48,14 @@ class Neuron {
 		
 //----------------------------------------------------------------------		
 		
-	//Setters :
+	///Setters :
 		void Set_membrane_potential (double membrane_potential);
 		void Set_nb_spks (unsigned int nb_spks);
 		void Set_time_spks (int_vector time_spks);
 		
 //----------------------------------------------------------------------
 		
-	//Methods :
+	///Methods :
 		bool Is_refractory (/*double dT*/);
 		bool Has_now_spiked (/*double dT*/);
 		

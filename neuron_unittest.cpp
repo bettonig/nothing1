@@ -4,11 +4,11 @@
 
 
 	static constexpr double tau_ = 20;
-	static constexpr double threshold_ = 20;
+	//static constexpr double threshold_ = 20;
 	static constexpr double c_ = 1.0;
-	static constexpr double J_ = 0.1; //0.1
-	static constexpr int refractory_time_ = 20;
-	static constexpr int delay = 15;	
+	//static constexpr double J_ = 0.1; //0.1
+	//static constexpr int refractory_time_ = 20;
+	//static constexpr int delay = 15;	
 	
 	double Exp_ = exp(-(0.1/tau_));
 	static constexpr double c2 = tau_/c_;

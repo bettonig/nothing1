@@ -1,8 +1,4 @@
 #include "neuron.h"
-#include <vector>
-//#include <cmath>
-//using namespace std;
-
 
 
 //Constructor & Destructor::
@@ -17,6 +13,7 @@ Neuron::Neuron ()
 	}
 }
 
+
 Neuron::Neuron (double membrane_potential, unsigned int nb_spks)
 :membrane_potential_(membrane_potential), nb_spks_(nb_spks), time_spks_()
 {
@@ -30,6 +27,7 @@ Neuron::Neuron (double membrane_potential, unsigned int nb_spks)
 /*Neuron::Neuron (const Neuron& another)
 :
 {}*/
+
 
 Neuron::~Neuron ()
 {/*std::cout << "NEURON TERMINATED" << std::endl;*/}
@@ -60,6 +58,7 @@ int Neuron::Get_buffer(size_t place) const
 
 
 
+
 //Setters::
 
 void Neuron::Set_membrane_potential (double membrane_potential)
@@ -74,6 +73,7 @@ void Neuron::Set_time_spks (int_vector time_spks)
 
 
 //----------------------------------------------------------------------
+
 
 
 
